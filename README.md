@@ -1,45 +1,37 @@
 # nanocode
 
-Minimal Claude Code alternative. Single Java file, runnable with [jbang](https://jbang.dev), zero..eh..1 json dependency, ~260 lines.
+Minimal Claude Code alternative. Single Java file, runnable with [jbang](https://jbang.dev), zero..eh..minimal dependencies via LangChain4j, ~200 lines.
 
-Built using Claude Code, then used to build itself.
+Refactored to use [LangChain4j](https://github.com/langchain4j/langchain4j) and [Google AI Gemini](https://ai.google.dev/).
 
 ![screenshot](screenshot.png)
 
 ## Features
 
-- Full agentic loop with tool use
+- Full agentic loop with tool use (powered by LangChain4j `AiServices`)
 - Tools: `read`, `write`, `edit`, `glob`, `grep`, `bash`
-- Conversation history
+- Conversation history (windowed)
 - Colored terminal output
 
 ## Usage
 
 ```bash
-export ANTHROPIC_API_KEY="your-key"
+export GOOGLE_AI_GEMINI_API_KEY="your-key"
 jbang nanocode.java
 ```
 
-### OpenRouter
-
-Use [OpenRouter](https://openrouter.ai) to access any model:
-
-```bash
-export OPENROUTER_API_KEY="your-key"
-jbang nanocode.java
-```
+### Configuration
 
 To use a different model:
 
 ```bash
-export OPENROUTER_API_KEY="your-key"
-export MODEL="openai/gpt-5.2"
+export MODEL="gemini-1.5-pro"
 jbang nanocode.java
 ```
 
 ## Commands
 
-- `/c` - Clear conversation
+- `/c` - Clear conversation history
 - `/q` or `exit` - Quit
 
 ## Tools
@@ -52,19 +44,6 @@ jbang nanocode.java
 | `glob` | Find files by pattern, sorted by mtime |
 | `grep` | Search files for regex |
 | `bash` | Run shell command |
-
-## Example
-
-```
-────────────────────────────────────────
-❯ what files are here?
-────────────────────────────────────────
-
-⏺ Glob(**/*.java)
-  ⎿  nanocode.java
-
-⏺ There's one Java file: nanocode.java
-```
 
 ## License
 
