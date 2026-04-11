@@ -1,6 +1,6 @@
 # nanocode
 
-A minimal, single-file coding agent implemented in Java. Powered by **LangChain4j** and **Google AI Gemini**.
+A minimal, single-file coding agent implemented in Java. Powered by [**LangChain4j**](https://docs.langchain4j.dev/) and **Google AI Gemini**.
 
 This repository contains two variants of a terminal-based coding assistant that can interact with your local filesystem, execute shell commands, and search the web.
 
@@ -12,7 +12,7 @@ This project was inspired by [Max Rydahl Andersen's article](https://xam.dk/blog
 
 ## Additions & Improvements
 
-This implementation diverges from the original project's goal of having the smallest possible set of dependencies. Instead, it adds integration with **LangChain4j** and its **Google Gemini** module to experiment with LangChain4j's `AiServices` and the experimental `agentic` module.
+This implementation diverges from the original project's goal of having the smallest possible set of dependencies. Instead, it adds integration with **LangChain4j** and its [**Google Gemini**](https://docs.langchain4j.dev/integrations/language-models/google-ai-gemini) module to experiment with LangChain4j's `AiServices` and the experimental `agentic` module.
 
 Key additions include:
 - **Web Search Tool**: A new `websearch` capability powered by Gemini's built-in Google Search integration.
@@ -25,7 +25,7 @@ Key additions include:
 ### 1. Basic Agent (`nanocode_basic.java`)
 A monolithic implementation using LangChain4j `AiServices`.
 - **Architecture**: Single agent with access to all tools.
-- **Library**: Uses `langchain4j-google-ai-gemini`.
+- **Library**: Uses [`langchain4j-google-ai-gemini`](https://docs.langchain4j.dev/integrations/language-models/google-ai-gemini).
 
 ### 2. Multi-Agent Supervisor (`nanocode_agentic.java`)
 An implementation using the experimental **LangChain4j Agentic** module.
