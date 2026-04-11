@@ -10,6 +10,16 @@ This repository contains two variants of a terminal-based coding assistant that 
 
 This project was inspired by [Max Rydahl Andersen's article](https://xam.dk/blog/nanocode-coding-agent-in-260-lines-of-java/) and is a fork of his original [nanocode](https://github.com/maxandersen/nanocode) repository.
 
+## Additions & Improvements
+
+This implementation diverges from the original project's goal of having the smallest possible set of dependencies. Instead, it adds integration with **LangChain4j** and its **Google Gemini** module to experiment with LangChain4j's `AiServices` and the experimental `agentic` module.
+
+Key additions include:
+- **Web Search Tool**: A new `websearch` capability powered by Gemini's built-in Google Search integration.
+- **Pretty Markdown Rendering**: Agent responses are now parsed and rendered with ANSI syntax highlighting (optimized for dark terminals).
+- **Multi-Agent Architecture**: An optional supervisor-based variant using the experimental LangChain4j Agentic module.
+- **Java 25 Modernization**: Updated to use the latest Java 25 preview features and the new `java.lang.IO` class.
+
 ## Variants
 
 ### 1. Basic Agent (`nanocode_basic.java`)
