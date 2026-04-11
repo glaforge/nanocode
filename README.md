@@ -6,6 +6,10 @@ This repository contains two variants of a terminal-based coding assistant that 
 
 ![screenshot](screenshot.png)
 
+## Credits
+
+This project was inspired by [Max Rydahl Andersen's article](https://xam.dk/blog/nanocode-coding-agent-in-260-lines-of-java/) and is a fork of his original [nanocode](https://github.com/maxandersen/nanocode) repository.
+
 ## Variants
 
 ### 1. Basic Agent (`nanocode_basic.java`)
