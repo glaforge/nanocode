@@ -70,4 +70,8 @@ export GOOGLE_AI_GEMINI_API_KEY="your-key"
 
 ## License
 
-MIT
+This project is licensed under the [Apache License, Version 2.0](LICENSE).
+
+## Disclaimer
+
+This is not an official Google project.
