@@ -41,7 +41,7 @@ import dev.langchain4j.agentic.scope.*;
 import dev.langchain4j.agentic.supervisor.*;
 
 /**
- * nanocode-agentic - multi-agent coding assistant.
+ * nanocode_agentic - multi-agent coding assistant.
  */
 
 static final String GEMINI_KEY = Optional.ofNullable(getenv("GOOGLE_AI_GEMINI_API_KEY"))
@@ -165,6 +165,30 @@ class SystemTools {
     }
 }
 
+class WebTools {
+    @Tool("Search the web using Google Search")
+    public String search(@P("The search query") String query) {
+        IO.println("\n" + GREEN + "⏺ WebSearch" + RESET + "(" + DIM + query + RESET + ")");
+        var searchModel = GoogleAiGeminiChatModel.builder()
+                .apiKey(GEMINI_KEY)
+                .modelName(MODEL_NAME)
+                .allowGoogleSearch(true)
+                .build();
+        return searchModel.chat(query);
+    }
+
+    @Tool("Fetch the content of a specific URL")
+    public String fetch(@P("The URL to fetch") String url) {
+        IO.println("\n" + GREEN + "⏺ WebFetch" + RESET + "(" + DIM + url + RESET + ")");
+        var fetchModel = GoogleAiGeminiChatModel.builder()
+                .apiKey(GEMINI_KEY)
+                .modelName(MODEL_NAME)
+                .allowUrlContext(true)
+                .build();
+        return fetchModel.chat("Please extract and summarize the content of this URL: " + url);
+    }
+}
+
 // --- Agent Definitions ---
 
 public interface FileAgent {
@@ -179,17 +203,15 @@ public interface SystemAgent {
     String work(@V("task") String task);
 }
 
-class WebSearchAgent {
-    @Agent(name = "web_searcher", description = "Expert in searching the web for information using Google Search.")
-    public String search(@V("query") String query) {
-        IO.println("\n" + GREEN + "⏺ WebSearch" + RESET + "(" + DIM + query + RESET + ")");
-        var searchModel = GoogleAiGeminiChatModel.builder()
-                .apiKey(GEMINI_KEY)
-                .modelName(MODEL_NAME)
-                .allowGoogleSearch(true)
-                .build();
-        return searchModel.chat(query);
-    }
+public interface WebAgent {
+    @Agent(name = "web_specialist", description = "Expert in searching the web and fetching content from URLs.")
+    @UserMessage("Perform this web task: {{task}}")
+    String work(@V("task") String task);
+}
+
+public interface NanocodeSupervisor extends AgenticScopeAccess {
+    @Agent(name = "supervisor")
+    String chat(@V("request") String request);
 }
 
 // --- UI Utils ---
@@ -267,7 +289,10 @@ void main(String[] args) throws Exception {
             .tools(new SystemTools())
             .build();
 
-    var webAgent = new WebSearchAgent();
+    var webAgent = AgenticServices.agentBuilder(WebAgent.class)
+            .chatModel(model)
+            .tools(new WebTools())
+            .build();
 
     // Orchestrate with Supervisor
     SupervisorAgent supervisor = AgenticServices.supervisorBuilder()
