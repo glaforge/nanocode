@@ -38,7 +38,7 @@ import dev.langchain4j.model.googleai.*;
 import dev.langchain4j.service.*;
 
 /**
- * nanocode - minimal CLI coding agent, powered by LangChain4j.
+ * nanocode_basic - minimal CLI coding agent, powered by LangChain4j.
  * Original: https://github.com/1rgs/nanocode and https://github.com/maxandersen/nanocode
  */
 
@@ -152,6 +152,17 @@ class Tools {
                 .allowGoogleSearch(true)
                 .build();
         return searchModel.chat(query);
+    }
+
+    @Tool("Fetch the content of a specific URL")
+    public String webfetch(@P("The URL to fetch") String url) {
+        println("\n" + GREEN + "⏺ WebFetch" + RESET + "(" + DIM + url + RESET + ")");
+        var fetchModel = GoogleAiGeminiChatModel.builder()
+                .apiKey(GEMINI_KEY)
+                .modelName(MODEL_NAME)
+                .allowUrlContext(true)
+                .build();
+        return fetchModel.chat("Please extract and summarize the content of this URL: " + url);
     }
 
     @Tool("Run shell command")
