@@ -15,7 +15,7 @@ This project was inspired by [Max Rydahl Andersen's article](https://xam.dk/blog
 This implementation diverges from the original project's goal of having the smallest possible set of dependencies. Instead, it adds integration with **LangChain4j** and its [**Google Gemini**](https://docs.langchain4j.dev/integrations/language-models/google-ai-gemini) module to experiment with LangChain4j's `AiServices` and the experimental `agentic` module.
 
 Key additions include:
-- **Web Search Tool**: A new `websearch` capability powered by Gemini's built-in Google Search integration.
+- **Web Search & Fetch**: New tools powered by Gemini's built-in Google Search and URL Context integrations.
 - **Pretty Markdown Rendering**: Agent responses are now parsed and rendered with ANSI syntax highlighting (optimized for dark terminals).
 - **Multi-Agent Architecture**: An optional supervisor-based variant using the experimental LangChain4j Agentic module.
 - **Java 25 Modernization**: Updated to use the latest Java 25 preview features and the new `java.lang.IO` class.
@@ -32,7 +32,7 @@ An implementation using the experimental **LangChain4j Agentic** module.
 - **Architecture**: A **Supervisor Agent** that orchestrates specialized sub-agents:
     - **`file_specialist`**: Filesystem navigation and manipulation.
     - **`system_specialist`**: Shell command execution and system management.
-    - **`web_searcher`**: Internet research via Gemini's built-in Google Search.
+    - **`web_specialist`**: Internet research and URL fetching.
 - **Library**: Uses `langchain4j-agentic`.
 
 ## Features
@@ -72,6 +72,7 @@ export GOOGLE_AI_GEMINI_API_KEY="your-key"
 | `grep` | Search file contents for regex patterns |
 | `bash` | Run shell commands (supports optional `dir`) |
 | `websearch` | Internet research using Google Search |
+| `webfetch` | Fetch and summarize content from a specific URL |
 
 ## Commands
 
