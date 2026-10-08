@@ -56,11 +56,13 @@ static final String MAGENTA = "\033[35m", UNDERLINE = "\033[4m", STRIKE = "\033[
 class Tools {
     @Tool("Read file with line numbers (file path, not directory)")
     public String read(@P("Path to the file") String path, 
-                       @P("Start line (optional)") Integer offset, 
+                       @P("Start line, 1-indexed (optional)") Integer offset, 
                        @P("Number of lines to read (optional)") Integer limit) throws IOException {
         println("\n" + GREEN + "⏺ Read" + RESET + "(" + DIM + path + RESET + ")");
-        var lines = readAllLines(Path.of(path));
-        int off = offset != null ? offset : 0;
+        var p = Path.of(path);
+        if (!isRegularFile(p)) return "error: file not found: " + path;
+        var lines = readAllLines(p);
+        int off = offset != null ? Math.max(0, offset - 1) : 0;
         int lim = limit != null ? limit : lines.size();
         var sb = new StringBuilder();
         for (int i = off; i < Math.min(off + lim, lines.size()); i++)
@@ -86,6 +88,7 @@ class Tools {
                        @P("Replace all occurrences") Boolean all) throws IOException {
         println("\n" + GREEN + "⏺ Edit" + RESET + "(" + DIM + path + RESET + ")");
         var filePath = Path.of(path);
+        if (!isRegularFile(filePath)) return "error: file not found: " + path;
         var text = readString(filePath);
         if (!text.contains(old)) return "error: old_string not found";
         
@@ -106,10 +109,12 @@ class Tools {
                        @P("Base path (optional)") String path) throws IOException {
         println("\n" + GREEN + "⏺ Glob" + RESET + "(" + DIM + pat + RESET + ")");
         var base = Path.of(path != null ? path : ".");
-        var matcher = FileSystems.getDefault().getPathMatcher("glob:" + base + "/" + pat);
         if (!exists(base)) return "none";
+        var normPat = pat.startsWith("**/") ? "{**/,}" + pat.substring(3) : pat;
+        var matcher = FileSystems.getDefault().getPathMatcher("glob:" + normPat);
         try (var walk = walk(base)) {
-            var files = walk.filter(Files::isRegularFile).filter(matcher::matches)
+            var files = walk.filter(Files::isRegularFile)
+                    .filter(p -> matcher.matches(base.relativize(p)))
                     .sorted((a, b) -> {
                         try { return getLastModifiedTime(b).compareTo(getLastModifiedTime(a)); } 
                         catch (IOException e) { return 0; }
@@ -118,6 +123,8 @@ class Tools {
             var result = files.isEmpty() ? "none" : String.join("\n", files);
             println("  " + DIM + "⎿  " + preview(result, 60) + RESET);
             return result;
+        } catch (UncheckedIOException e) {
+            return "error: " + e.getCause().getMessage();
         }
     }
 

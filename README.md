@@ -39,7 +39,7 @@ An implementation using the experimental **LangChain4j Agentic** module.
 
 - **Agentic Loop**: Autonomous reasoning and tool usage.
 - **Modern Java**: Uses **Java 25** preview features (including `java.lang.IO`).
-- **Gemini 3 Integration**: Configured for `gemini-3-flash-preview` with thinking enabled.
+- **Gemini 3.8 Integration**: Configured for `gemini-3.8-flash` with thinking enabled.
 - **Terminal Rendering**: ANSI-highlighted Markdown output.
 - **Interactive UI**: Yellow user input and tool execution logs.
 
