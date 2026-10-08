@@ -1,12 +1,12 @@
 ///usr/bin/env jbang "$0" "$@" ; exit $?
 //JAVA 25+
 //COMPILE_OPTIONS --enable-preview -source 25
-//RUNTIME_OPTIONS --enable-preview -Dorg.slf4j.simpleLogger.defaultLogLevel=warn
-//DEPS dev.langchain4j:langchain4j:1.13.0
-//DEPS dev.langchain4j:langchain4j-core:1.13.0
-//DEPS dev.langchain4j:langchain4j-google-ai-gemini:1.13.0
-//DEPS dev.langchain4j:langchain4j-agentic:1.13.0-beta23
-//DEPS org.slf4j:slf4j-simple:2.0.17
+//RUNTIME_OPTIONS --enable-preview -Dorg.slf4j.simpleLogger.defaultLogLevel=warn -Dorg.slf4j.simpleLogger.log.dev.langchain4j.service.ToolErrorHandlingNotice=off
+//DEPS dev.langchain4j:langchain4j:1.22.0
+//DEPS dev.langchain4j:langchain4j-core:1.22.0
+//DEPS dev.langchain4j:langchain4j-google-ai-gemini:1.22.0
+//DEPS dev.langchain4j:langchain4j-agentic:1.22.0-beta32
+//DEPS org.slf4j:slf4j-simple:2.0.20
 
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,7 +47,7 @@ import dev.langchain4j.agentic.supervisor.*;
 static final String GEMINI_KEY = Optional.ofNullable(getenv("GOOGLE_AI_GEMINI_API_KEY"))
         .orElse(getenv("GEMINI_API_KEY"));
 static final String MODEL_NAME = Optional.ofNullable(getenv("MODEL"))
-        .orElse("gemini-3-flash-preview");
+        .orElse("gemini-3.8-flash");
 
 static final String RESET = "\033[0m", BOLD = "\033[1m", DIM = "\033[2m", ITALIC = "\033[3m";
 static final String BLUE = "\033[34m", CYAN = "\033[36m", GREEN = "\033[32m", RED = "\033[31m", YELLOW = "\033[93m";
