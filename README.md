@@ -16,7 +16,7 @@ This implementation diverges from the original project's goal of having the smal
 
 Key additions include:
 - **Web Search & Fetch**: New tools powered by Gemini's built-in Google Search and URL Context integrations.
-- **Pretty Markdown Rendering**: Agent responses are now parsed and rendered with ANSI syntax highlighting (optimized for dark terminals).
+- **Pretty Markdown Rendering**: Agent responses are now parsed and rendered with ANSI syntax highlighting using [Ansiren](https://github.com/glaforge/ansiren) (optimized for dark terminals).
 - **Multi-Agent Architecture**: An optional supervisor-based variant using the experimental LangChain4j Agentic module.
 - **Java 25 Modernization**: Updated to use the latest Java 25 preview features and the new `java.lang.IO` class.
 

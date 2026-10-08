@@ -5,6 +5,7 @@
 //DEPS dev.langchain4j:langchain4j:1.22.0
 //DEPS dev.langchain4j:langchain4j-core:1.22.0
 //DEPS dev.langchain4j:langchain4j-google-ai-gemini:1.22.0
+//DEPS io.github.glaforge:ansiren:0.1.1
 //DEPS org.slf4j:slf4j-simple:2.0.20
 
 /*
@@ -36,6 +37,7 @@ import dev.langchain4j.memory.chat.*;
 import dev.langchain4j.model.chat.*;
 import dev.langchain4j.model.googleai.*;
 import dev.langchain4j.service.*;
+import io.github.glaforge.ansiren.MarkdownRenderer;
 
 /**
  * nanocode_basic - minimal CLI coding agent, powered by LangChain4j.
@@ -220,34 +222,11 @@ static String preview(String s, int max) {
     return lines.length > 1 ? p + " ... +" + (lines.length - 1) + " lines" : (lines[0].length() > max ? p + "..." : p);
 }
 
+static final MarkdownRenderer MARKDOWN_RENDERER = new MarkdownRenderer();
+
 static String markdown(String md) {
-    if (md == null) return "";
-    var blocks = new ArrayList<String>();
-    var m = Pattern.compile("(?s)```(\\w+)?\\n(.*?)\\n```").matcher(md);
-    var sb = new StringBuilder();
-    while (m.find()) {
-        var lang = m.group(1) == null ? "" : m.group(1);
-        var content = m.group(2);
-        var formatted = (lang.isEmpty() ? "" : ITALIC + BOLD + lang + RESET + "\n") +
-                        content.replaceAll("(?m)^", CODE_BG) + RESET + "\n";
-        m.appendReplacement(sb, Matcher.quoteReplacement("%%BLOCK_CODE_" + blocks.size() + "%%"));
-        blocks.add(formatted);
-    }
-    m.appendTail(sb);
-    var res = sb.toString()
-        .replaceAll("\\*\\*(.*?)\\*\\*", BOLD + "$1" + RESET) // Bold
-        .replaceAll("\\*(.*?)\\*", ITALIC + "$1" + RESET) // Italic
-        .replaceAll("__(.*?)__", UNDERLINE + "$1" + RESET) // Underline
-        .replaceAll("~~(.*?)~~", STRIKE + "$1" + RESET) // Strikethrough
-        .replaceAll("(?m)^> ?(.*)", ITALIC + BLUE + BOLD + "> $1" + RESET) // Blockquote
-        .replaceAll("(?m)^([\\d]+\\.|-|\\*) (.*)", MAGENTA + BOLD + "$1" + RESET + " $2") // Lists
-        .replaceAll("(?m)^(#{1,6}) (.*)", CYAN + BOLD + "$1 $2" + RESET) // Headers
-        .replaceAll("(?m)^(.*?\n={2,}\n)", CYAN + BOLD + "$1" + RESET) // Headers (===)
-        .replaceAll("(?m)^(.*?\n-{2,}\n)", CYAN + BOLD + "$1" + RESET) // Headers (---)
-        .replaceAll("!?\\[(.*?)]\\((.*?)\\)", BLUE + "$1" + RESET + " (" + BLUE + UNDERLINE + "$2" + RESET + ")"); // Links/Images
-    for (int i = 0; i < blocks.size(); i++)
-        res = res.replace("%%BLOCK_CODE_" + i + "%%", blocks.get(i));
-    return res;
+    if (md == null || md.isBlank()) return "";
+    return MARKDOWN_RENDERER.render(md).stripTrailing();
 }
 
 // --- Main ---
